@@ -5,7 +5,7 @@ source ops_env.sh
 source make_config.sh
 
 # 配置 glance 
-echo("配置 glance ")
+echo "配置 glance "
 
 mysql <<EOF
 CREATE DATABASE glance;
@@ -37,7 +37,7 @@ service glance-registry restart
 service glance-api restart
 
 # 配置 placement
-echo("配置 placement")
+echo "配置 placement"
 
 mysql <<EOF
 CREATE DATABASE placement;
@@ -67,7 +67,7 @@ su -s /bin/sh -c "placement-manage db sync" placement
 service apache2 restart
 
 # 配置 nova 
-echo("配置 nova ")
+echo "配置 nova "
 
 mysql <<EOF
 CREATE DATABASE nova_api;
@@ -115,7 +115,7 @@ service nova-conductor restart
 service nova-novncproxy restart
 
 # 配置 neutron
-echo("配置 neutron")
+echo "配置 neutron"
 
 mysql <<EOF
 CREATE DATABASE neutron;
@@ -165,7 +165,7 @@ service neutron-metadata-agent restart
 service neutron-l3-agent restart
 
 # 配置horizon
-echo("配置horizon")
+echo "配置horizon"
 
 cp /etc/openstack-dashboard/local_settings.py /etc/openstack-dashboard/local_settings.py.bak
 cp "${CRTDIR}/config/local_settings.py" /etc/openstack-dashboard/local_settings.py 
@@ -173,7 +173,7 @@ cp "${CRTDIR}/config/local_settings.py" /etc/openstack-dashboard/local_settings.
 service apache2 reload
 
 # 配置cinder
-echo("配置cinder")
+echo "配置cinder"
 
 mysql <<EOF
 CREATE DATABASE cinder;
@@ -211,7 +211,7 @@ service cinder-scheduler restart
 service apache2 restart
 
 # 配置zun
-echo("配置zun")
+echo "配置zun"
 
 source "${CRTDIR}/config/admin-openrc"
 

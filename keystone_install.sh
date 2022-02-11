@@ -4,7 +4,7 @@
 source make_config.sh
 
 # 配置 chrony
-echo("配置 chrony")
+echo "配置 chrony"
 
 cp /etc/chrony/chrony.conf /etc/chrony/chrony.conf.bak
 cp "${CRTDIR}/config/chrony.conf" /etc/chrony/chrony.conf
@@ -13,7 +13,7 @@ service chrony restart
 chronyc sources
 
 # 配置 maridb
-echo("配置 maridb")
+echo "配置 maridb"
 
 cp "${CRTDIR}/config/99-openstack.cnf" /etc/mysql/mariadb.conf.d/99-openstack.cnf
 
@@ -32,13 +32,13 @@ y
 EOF
 
 # 配置rabbitmq
-echo("配置rabbitmq")
+echo "配置rabbitmq"
 
 rabbitmqctl add_user openstack ${pwd_ops}
 rabbitmqctl set_permissions openstack ".*" ".*" ".*"
 
 # 配置 memcached
-echo("配置 memcached")
+echo "配置 memcached"
 
 cp /etc/memcached.conf /etc/memcached.conf.bak
 cp "${CRTDIR}/config/memcached.conf" /etc/memcached.conf
@@ -46,7 +46,7 @@ cp "${CRTDIR}/config/memcached.conf" /etc/memcached.conf
 service memcached restart
 
 # 配置 etcd
-echo("配置 etcd")
+echo "配置 etcd"
 
 cp /etc/default/etcd /etc/default/etcd.bak
 cp "${CRTDIR}/config/etcd" /etc/default/etcd
@@ -55,7 +55,7 @@ systemctl enable etcd
 systemctl restart etcd
 
 # 配置 keystone
-echo("配置 keystone")
+echo "配置 keystone"
 
 mysql <<EOF
 CREATE DATABASE keystone;
