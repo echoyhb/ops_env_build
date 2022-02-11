@@ -37,6 +37,8 @@ echo "配置rabbitmq"
 rabbitmqctl add_user openstack ${pwd_ops}
 rabbitmqctl set_permissions openstack ".*" ".*" ".*"
 
+service rabbitmq-server restart
+
 # 配置 memcached
 echo "配置 memcached"
 
