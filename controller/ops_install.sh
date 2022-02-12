@@ -130,6 +130,12 @@ expect "*Password*" { send "${pwd_ops}\r" }
 expect "*Repeat*" { send "${pwd_ops}\r" }
 expect eof
 EOF
+expect <<EOF
+spawn openstack user create --domain default --password-prompt kuryr
+expect "*Password*" { send "${pwd_ops}\r" }
+expect "*Repeat*" { send "${pwd_ops}\r" }
+expect eof
+EOF
 
 # 配置 glance 
 echo "配置 glance "
@@ -353,6 +359,7 @@ GRANT ALL PRIVILEGES ON zun.* TO 'zun'@'%' \
 EOF
 
 openstack role add --project service --user zun admin
+openstack role add --project service --user kuryr admin
 openstack service create --name zun \
     --description "Container Service" container
 openstack endpoint create --region RegionOne \
@@ -395,6 +402,5 @@ systemctl enable zun-api
 systemctl enable zun-wsproxy
 systemctl start zun-api
 systemctl start zun-wsproxy
-
 
 
