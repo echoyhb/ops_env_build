@@ -206,6 +206,8 @@ openstack endpoint create --region RegionOne \
 cp /etc/cinder/cinder.conf /etc/cinder/cinder.conf.bak
 cp "${CRTDIR}/config/cinder.conf" /etc/cinder/cinder.conf
 
+su -s /bin/sh -c "cinder-manage db sync" cinder
+
 service nova-api restart
 service cinder-scheduler restart
 service apache2 restart
