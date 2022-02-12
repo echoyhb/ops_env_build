@@ -4,10 +4,8 @@
 # 使用配置好的ops环境变量替换模板config文件
 
 function replace () {
-    sed  -i "s#CONTROLLER_MANAGEMENT_SUBNET#${controller_management_subnet}#g" "$1"
-    sed  -i "s#CONTROLLER_MANAGEMENT_IP#${controller_management_ip}#g" "$1"
-    sed  -i "s#PROVIDER_INTERFACE_NAME#${controller_provider_ifname}#g" "$1"
-    sed  -i "s#PWD_MYSQL#${pwd_mysql}#g"  "$1"
+    sed  -i "s#COMPUTE_MANAGEMENT_IP#${compute_management_ip}#g" "$1"
+    sed  -i "s#PROVIDER_INTERFACE_NAME#${compute_provider_ifname}#g" "$1"
     sed  -i "s#PWD_OPS#${pwd_ops}#g"  "$1"
 }
 
