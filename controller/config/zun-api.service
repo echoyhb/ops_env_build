@@ -1,9 +1,0 @@
-[Unit]
-Description = OpenStack Container Service API
-
-[Service]
-ExecStart = /usr/local/bin/zun-api
-User = zun
-
-[Install]
-WantedBy = multi-user.target
