@@ -3,11 +3,8 @@
 
 # 设置 openstack 计算节点环境变量
 
-# 计算节点管理网络ip
-compute_management_ip='10.0.1.12'
-
-# 计算节点provider网络对应的网卡名称
-compute_provider_ifname='ens39'
+# 存储节点管理网络ip
+storage_management_ip='10.0.1.12'
 
 # openstack配置项统一密码 && openstack admin用户密码
 pwd_ops='ics03117'
