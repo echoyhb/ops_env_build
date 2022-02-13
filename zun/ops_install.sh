@@ -4,7 +4,7 @@ source ops_env.sh
 source make_config.sh
 
 # 更新docker为国内源
-cp ${CRTDIR}/config_template/daemon.json /etc/docker/daemon.json
+cp "${CRTDIR}/config/daemon.json" /etc/docker/daemon.json
 systemctl restart docker
 
 # 配置 kuryr
