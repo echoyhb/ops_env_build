@@ -404,3 +404,8 @@ systemctl start zun-api
 systemctl start zun-wsproxy
 
 
+# 安装命令行包
+pip3 install python-cinderclient==4.2.1
+pip3 install python-zunclient==3.3.0
+
+
