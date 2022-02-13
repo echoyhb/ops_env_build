@@ -3,6 +3,15 @@
 source ops_env.sh
 source make_config.sh
 
+# 配置 chrony
+echo "配置 chrony"
+
+cp /etc/chrony/chrony.conf /etc/chrony/chrony.conf.bak
+cp "${CRTDIR}/config/chrony.conf" /etc/chrony/chrony.conf
+
+service chrony restart
+timedatectl set-timezone Asia/Shanghai
+
 # 更新docker为国内源
 cp "${CRTDIR}/config/daemon.json" /etc/docker/daemon.json
 systemctl restart docker

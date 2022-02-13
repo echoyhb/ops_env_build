@@ -12,6 +12,7 @@ cp "${CRTDIR}/config/chrony.conf" /etc/chrony/chrony.conf
 
 service chrony restart
 chronyc sources
+timedatectl set-timezone Asia/Shanghai
 
 # 配置 maridb
 echo "配置 maridb"

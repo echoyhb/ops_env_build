@@ -11,6 +11,7 @@ cp /etc/chrony/chrony.conf /etc/chrony/chrony.conf.bak
 cp "${CRTDIR}/config/chrony.conf" /etc/chrony/chrony.conf
 
 service chrony restart
+timedatectl set-timezone Asia/Shanghai
 
 # 配置 nova
 echo "配置 nova"
