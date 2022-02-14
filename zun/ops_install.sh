@@ -33,6 +33,8 @@ cd /var/lib/kuryr
 git clone -b master https://opendev.org/openstack/kuryr-libnetwork.git
 chown -R kuryr:kuryr kuryr-libnetwork
 cd kuryr-libnetwork
+pip3 install -U pip setuptools
+pip install -U pip setuptools
 pip3 install -r requirements.txt
 python3 setup.py install
 
@@ -65,8 +67,6 @@ cd /var/lib/zun
 git clone -b stable/stein https://git.openstack.org/openstack/zun.git
 chown -R zun:zun zun
 cd zun
-pip3 install -U pip setuptools
-pip install -U pip setuptools
 pip3 install -r requirements.txt
 python3 setup.py install
 
