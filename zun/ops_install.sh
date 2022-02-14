@@ -34,7 +34,7 @@ git clone -b master https://opendev.org/openstack/kuryr-libnetwork.git
 chown -R kuryr:kuryr kuryr-libnetwork
 cd kuryr-libnetwork
 pip3 install -U pip setuptools
-pip3 install --ignore-installed PyYAML pymysql
+pip3 install --ignore-installed PyYAML
 pip3 install -r requirements.txt
 python3 setup.py install
 
