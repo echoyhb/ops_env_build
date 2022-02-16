@@ -71,6 +71,7 @@ EOF
 
 cp /etc/keystone/keystone.conf /etc/keystone/keystone.conf.bak
 cp "${CRTDIR}/config/keystone.conf" /etc/keystone/keystone.conf
+chown keystone:keystone /etc/keystone/keystone.conf
 
 su -s /bin/sh -c "keystone-manage db_sync" keystone
 keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
@@ -125,12 +126,12 @@ expect "*Password*" { send "${pwd_ops}\r" }
 expect "*Repeat*" { send "${pwd_ops}\r" }
 expect eof
 EOF
-expect <<EOF
-spawn openstack user create --domain default --password-prompt cinder
-expect "*Password*" { send "${pwd_ops}\r" }
-expect "*Repeat*" { send "${pwd_ops}\r" }
-expect eof
-EOF
+# expect <<EOF
+# spawn openstack user create --domain default --password-prompt cinder
+# expect "*Password*" { send "${pwd_ops}\r" }
+# expect "*Repeat*" { send "${pwd_ops}\r" }
+# expect eof
+# EOF
 expect <<EOF
 spawn openstack user create --domain default --password-prompt kuryr
 expect "*Password*" { send "${pwd_ops}\r" }
@@ -163,6 +164,7 @@ openstack endpoint create --region RegionOne \
 
 cp /etc/glance/glance-api.conf /etc/glance/glance-api.conf.bak
 cp "${CRTDIR}/config/glance-api.conf" /etc/glance/glance-api.conf
+chown glance:glance /etc/glance/glance-api.conf
 cp /etc/glance/glance-registry.conf /etc/glance/glance-registry.conf.bak
 cp "${CRTDIR}/config/glance-registry.conf" /etc/glance/glance-registry.conf
 
@@ -195,6 +197,7 @@ openstack endpoint create --region RegionOne \
 
 cp /etc/placement/placement.conf /etc/placement/placement.conf.bak
 cp "${CRTDIR}/config/placement.conf" /etc/placement/placement.conf
+chown placement:placement /etc/placement/placement.conf
 
 su -s /bin/sh -c "placement-manage db sync" placement
 
@@ -235,6 +238,7 @@ openstack endpoint create --region RegionOne \
 
 cp /etc/nova/nova.conf /etc/nova/nova.conf.bak
 cp "${CRTDIR}/config/nova.conf" /etc/nova/nova.conf
+chwon nova:nova /etc/nova/nova.conf
 
 su -s /bin/sh -c "nova-manage api_db sync" nova
 su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova
@@ -273,20 +277,26 @@ openstack endpoint create --region RegionOne \
 
 cp /etc/neutron/neutron.conf /etc/neutron/neutron.conf.bak
 cp "${CRTDIR}/config/neutron.conf" /etc/neutron/neutron.conf
+chown neutron:neutron /etc/neutron/neutron.conf
 cp /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugins/ml2/ml2_conf.ini.bak
 cp "${CRTDIR}/config/ml2_conf.ini" /etc/neutron/plugins/ml2/ml2_conf.ini
+chown neutron:neutron /etc/neutron/plugins/ml2/ml2_conf.ini
 cp /etc/neutron/plugins/ml2/linuxbridge_agent.ini /etc/neutron/plugins/ml2/linuxbridge_agent.ini.bak
 cp "${CRTDIR}/config/linuxbridge_agent.ini" /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+chown neutron:neutron /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 
 sysctl -w net.bridge.bridge-nf-call-iptables=1
 sysctl -w net.bridge.bridge-nf-call-ip6tables=1
 
 cp /etc/neutron/l3_agent.ini /etc/neutron/l3_agent.ini.bak
 cp "${CRTDIR}/config/l3_agent.ini" /etc/neutron/l3_agent.ini
+chown neutron:neutron /etc/neutron/l3_agent.ini
 cp /etc/neutron/dhcp_agent.ini  /etc/neutron/dhcp_agent.ini.bak
 cp "${CRTDIR}/config/dhcp_agent.ini" /etc/neutron/dhcp_agent.ini 
+chown neutron:neutron /etc/neutron/dhcp_agent.ini
 cp /etc/neutron/metadata_agent.ini /etc/neutron/metadata_agent.ini.bak
 cp "${CRTDIR}/config/metadata_agent.ini" /etc/neutron/metadata_agent.ini
+chown neutron:neutron /etc/neutron/metadata_agent.ini
 
 su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
   --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
@@ -306,45 +316,45 @@ cp "${CRTDIR}/config/local_settings.py" /etc/openstack-dashboard/local_settings.
 
 service apache2 reload
 
-# 配置cinder
-echo "配置cinder"
+# # 配置cinder
+# echo "配置cinder"
 
-mysql <<EOF
-CREATE DATABASE cinder;
-GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'localhost' \
-  IDENTIFIED BY '${pwd_ops}';
-GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'%' \
-  IDENTIFIED BY '${pwd_ops}';
-EOF
+# mysql <<EOF
+# CREATE DATABASE cinder;
+# GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'localhost' \
+#   IDENTIFIED BY '${pwd_ops}';
+# GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'%' \
+#   IDENTIFIED BY '${pwd_ops}';
+# EOF
 
-source "${CRTDIR}/config/admin-openrc"
+# source "${CRTDIR}/config/admin-openrc"
 
-openstack role add --project service --user cinder admin
-openstack service create --name cinderv2 \
-  --description "OpenStack Block Storage" volumev2
-openstack service create --name cinderv3 \
-  --description "OpenStack Block Storage" volumev3
-openstack endpoint create --region RegionOne \
-  volumev2 public http://controller:8776/v2/%\(project_id\)s
-openstack endpoint create --region RegionOne \
-  volumev2 internal http://controller:8776/v2/%\(project_id\)s
-openstack endpoint create --region RegionOne \
-  volumev2 admin http://controller:8776/v2/%\(project_id\)s
-openstack endpoint create --region RegionOne \
-  volumev3 public http://controller:8776/v3/%\(project_id\)s
-openstack endpoint create --region RegionOne \
-  volumev3 internal http://controller:8776/v3/%\(project_id\)s
-openstack endpoint create --region RegionOne \
-  volumev3 admin http://controller:8776/v3/%\(project_id\)s
+# openstack role add --project service --user cinder admin
+# openstack service create --name cinderv2 \
+#   --description "OpenStack Block Storage" volumev2
+# openstack service create --name cinderv3 \
+#   --description "OpenStack Block Storage" volumev3
+# openstack endpoint create --region RegionOne \
+#   volumev2 public http://controller:8776/v2/%\(project_id\)s
+# openstack endpoint create --region RegionOne \
+#   volumev2 internal http://controller:8776/v2/%\(project_id\)s
+# openstack endpoint create --region RegionOne \
+#   volumev2 admin http://controller:8776/v2/%\(project_id\)s
+# openstack endpoint create --region RegionOne \
+#   volumev3 public http://controller:8776/v3/%\(project_id\)s
+# openstack endpoint create --region RegionOne \
+#   volumev3 internal http://controller:8776/v3/%\(project_id\)s
+# openstack endpoint create --region RegionOne \
+#   volumev3 admin http://controller:8776/v3/%\(project_id\)s
 
-cp /etc/cinder/cinder.conf /etc/cinder/cinder.conf.bak
-cp "${CRTDIR}/config/cinder.conf" /etc/cinder/cinder.conf
+# cp /etc/cinder/cinder.conf /etc/cinder/cinder.conf.bak
+# cp "${CRTDIR}/config/cinder.conf" /etc/cinder/cinder.conf
 
-su -s /bin/sh -c "cinder-manage db sync" cinder
+# su -s /bin/sh -c "cinder-manage db sync" cinder
 
-service nova-api restart
-service cinder-scheduler restart
-service apache2 restart
+# service nova-api restart
+# service cinder-scheduler restart
+# service apache2 restart
 
 # 配置zun
 echo "配置zun"
@@ -408,7 +418,7 @@ systemctl start zun-wsproxy
 
 
 # 安装命令行包
-pip3 install python-cinderclient==4.2.1
+# pip3 install python-cinderclient==4.2.1
 pip3 install python-zunclient==3.3.0
 
 
